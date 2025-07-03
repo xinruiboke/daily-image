@@ -3,12 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>每日一图 - 留存世间奇景</title>
+    <title>Bing - 每日一图</title>
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-    <link
-      rel="stylesheet"
-      href="https://fontsapi.zeoseven.com/488/main/result.css"
-    />
+    <link rel="stylesheet" href="https://cdn.xrbk.cn/fonts/LXGWWenKaiScreen/result.css">
     <style>
       * {
         box-sizing: border-box;
@@ -16,57 +13,200 @@
         padding: 0;
       }
       body {
-        font-family: "STDongGuanTi", "Segoe UI", Tahoma, Geneva, Verdana,
-          sans-serif;
-        color: #e0e0e0;
-        background-color: #121212;
+        font-family: "LXGW WenKai Screen";
         line-height: 1.6;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
+        color: #333;
+        background-color: #ffffff;
       }
-
-      /* 悬浮菜单 */
-      .floating-menu {
+      
+      /* 全宽导航栏 */
+      .navbar {
         position: fixed;
-        top: 20px;
-        left: 20px;
-        z-index: 1001;
-        display: flex;
-        background: rgba(30, 30, 30, 0.8);
+        top: 0;
+        left: 0;
+        width: 100%;
         backdrop-filter: blur(10px);
-        border-radius: 30px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        transition: all 0.3s ease;
-        overflow: hidden;
+        z-index: 1000;
+        padding: 10px 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.9);
       }
-      .floating-menu::after {
-        content: "";
-        width: 15px;
-        border-radius: 30px;
+      
+      .navbar-item {
+        color: #333;
       }
-    
-      .menu-item {
+      
+      .navbar-item:hover {
+        color: #000;
+      }
+      
+      .navbar-item::after {
+        background-color: #000;
+      }
+      
+      .menu-toggle {
+        color: #333;
+      }
+      
+      .card {
+        background: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        will-change: transform, opacity; /* 优化动画性能 */
+      }
+      
+      .card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+      
+      .date-label {
+        background: rgba(255, 255, 255, 0.9);
+        color: #333;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+      
+      .copy-text {
+        background: linear-gradient(to top, rgba(255, 255, 255, 0.95), transparent);
+        color: #333;
+      }
+      
+      .modal {
+        background: rgba(255, 255, 255, 0.95);
+      }
+      
+      .modal-caption {
+        background: linear-gradient(to top, rgba(255, 255, 255, 0.95), transparent);
+        color: #333;
+      }
+      
+      .modal-close {
+        color: #333;
+      }
+      
+      footer {
+        background: #f5f5f5;
+        color: #666;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+      }
+      
+      footer a {
+        color: #333;
+      }
+      
+      footer a:hover {
+        color: #000;
+      }
+      
+      footer a::after {
+        background-color: #000;
+      }
+      
+      .yiyan {
+        background: #f5f5f5;
+        color: #333;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+      }
+      
+      .yiyan-content::before,
+      .yiyan-content::after {
+        border-color: rgba(0, 0, 0, 0.2);
+      }
+      
+      .history-container {
+        background: #f5f5f5;
+      }
+      
+      /* 导航栏居中布局 */
+      .navbar-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center; /* 改为居中 */
+        align-items: center;
+        position: relative; /* 为绝对定位的子元素提供参考 */
+      }
+      
+      .navbar-logo {
         display: flex;
         align-items: center;
-        padding: 5px 10px;
-        color: #e0e0e0;
-        text-decoration: none;
-        font-size: 0.9rem;
+        gap: 10px;
+        position: absolute; /* 绝对定位在左侧 */
+        left: 0;
       }
-
-      .menu-item:hover {
-        color: #fff;
-        border-bottom: 1px solid #fff;
-      }
-      .menu-icon {
-        width: 22px;
-        height: 22px;
+      
+      .navbar-logo img {
+        width: 24px;
+        height: 24px;
         border-radius: 50%;
       }
-      @media (max-width: 368px) {
-        .floating-menu {
+      
+      .navbar-menu {
+        display: flex;
+        gap: 20px;
+      }
+      
+      .navbar-item {
+        text-decoration: none;
+        padding: 5px 10px;
+        position: relative;
+        transition: color 0.3s ease;
+      }
+      
+      .navbar-item:hover {
+        color: #000;
+      }
+      
+      .navbar-item::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 10px;
+        transition: width 0.3s ease;
+      }
+      
+      .navbar-item:hover::after {
+        width: calc(100% - 20px);
+      }
+      
+      .menu-toggle {
+        display: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        position: absolute; /* 绝对定位在右侧 */
+        right: 0;
+      }
+      
+      @media (max-width: 768px) {
+        .navbar-menu {
           display: none;
+          flex-direction: column;
+          position: absolute;
+          top: 100%;
+          left: 0;
+          width: 100%;
+          padding: 10px 20px;
+          background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .navbar-menu.active {
+          display: flex;
+        }
+        
+        .menu-toggle {
+          display: block;
+        }
+        
+        .navbar-logo {
+          position: static; /* 移动端恢复静态定位 */
+          margin-right: auto; /* 左侧对齐 */
+        }
+        
+        .navbar-content {
+          justify-content: space-between; /* 移动端左右分布 */
         }
       }
 
@@ -74,26 +214,70 @@
       .hero {
         position: relative;
         width: 100%;
-        height: 100vh;
+        height: 80vh;
+        overflow: hidden;
+        padding-top: 60px;
+        background: #ffffff;
+      }
+      
+      .hero-img-container {
+        width: 100%;
+        height: 100%;
+        position: relative;
         overflow: hidden;
       }
-      .hero img {
+      
+      .hero-img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        transition: transform 0.5s ease;
+        opacity: 0;
       }
-      .hero:hover img {
-        transform: scale(1.02);
+      
+      .hero-img.loaded {
+        opacity: 1;
       }
-      .hero .overlay {
+      
+      .hero-img-loading {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        transition: opacity 0.3s ease;
+      }
+      
+      .hero-img-loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        border-top-color: #4a6cf7;
+        animation: spin 1s ease-in-out infinite;
+      }
+      
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      
+      .hero:hover .hero-img {
+        transform: scale(1.02);
+      }
+      
+      .hero .overlay {
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        height: calc(100% - 60px);
         background: linear-gradient(
           to top,
-          rgba(0, 0, 0, 0.8),
+          rgba(0, 0, 0, 0.7),
           transparent 40%
         );
         display: flex;
@@ -102,6 +286,7 @@
         padding: 40px;
         color: #fff;
       }
+      
       .hero .center-text {
         position: absolute;
         top: 50%;
@@ -110,24 +295,28 @@
         text-align: center;
         width: 100%;
       }
+      
       .hero .center-text h1 {
         font-size: 3rem;
         font-weight: 300;
         margin-bottom: 15px;
         text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
       }
+      
       .hero .center-text p {
         font-size: 1.2rem;
         max-width: 600px;
         margin: 0 auto;
         text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
       }
+      
       .hero .overlay .date {
         font-size: 2rem;
         margin-bottom: 10px;
         font-weight: 300;
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
       }
+      
       .hero .overlay .copy {
         font-size: 1.2rem;
         max-width: 1000px;
@@ -137,13 +326,11 @@
 
       /* 一言样式 */
       .yiyan {
-        background: #1e1e1e;
-        color: #e0e0e0;
         padding: 40px 0 20px 0;
         text-align: center;
         font-size: 1.2rem;
         line-height: 1.8;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -167,8 +354,8 @@
         position: absolute;
         width: 20px;
         height: 20px;
-        border-color: rgba(255, 255, 255, 0.3);
         border-style: solid;
+        border-color: rgba(0, 0, 0, 0.2);
       }
 
       .yiyan-content::before {
@@ -187,29 +374,18 @@
         display: inline-block;
         width: 20px;
         height: 20px;
-        border: 2px solid rgba(255, 255, 255, 0.3);
+        border: 2px solid rgba(0, 0, 0, 0.2);
         border-radius: 50%;
-        border-top-color: #fff;
+        border-top-color: #333;
         animation: spin 1s ease-in-out infinite;
-      }
-
-      /* .yiyan-signature {
-        width: 760px;
-        max-width: 100%;
-        text-align: right;
-        padding: 20px 0;
-      } */
-      
-      @keyframes spin {
-        to { transform: rotate(360deg); }
       }
 
       /* History Grid */
       .history-container {
         padding: 40px 20px;
-        background: #1e1e1e;
         flex: 1;
       }
+      
       .history {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -230,74 +406,94 @@
         }
       }
 
-      /* 图片加载过渡效果 */
-      .img-loading {
-        filter: blur(20px);
-        opacity: 0;
-        transform: scale(1.1);
-        transition: filter 0.8s ease, opacity 0.8s ease, transform 0.8s ease;
-        background: #2d2d2d;
-      }
-
-      .img-loading.img-loaded {
-        filter: blur(0);
-        opacity: 1;
-        transform: scale(1);
-      }
-
+      /* 卡片样式 */
       .card {
         position: relative;
         border-radius: 8px;
         overflow: hidden;
-        background: #000;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         transition: all 0.3s ease;
         cursor: pointer;
+        aspect-ratio: 16/9;
+        will-change: transform, opacity; /* 优化动画性能 */
       }
+      
       .card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
       }
-      .card img {
+      
+      .card-img-container {
+        position: relative;
         width: 100%;
-        height: 250px;
-        object-fit: cover;
-        display: block;
-        transition: transform 0.5s ease;
+        height: 100%;
       }
-      .card:hover img {
+      
+      .card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+        opacity: 0;
+      }
+      
+      .card-img.loaded {
+        opacity: 1;
+      }
+      
+      .card-img-loading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        transition: opacity 0.3s ease;
+      }
+      
+      .card-img-spinner {
+        width: 30px;
+        height: 30px;
+        border: 3px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        border-top-color: #4a6cf7;
+        animation: spin 1s ease-in-out infinite;
+      }
+      
+      .card:hover .card-img {
         transform: scale(1.05);
       }
+      
       .card .date-label {
         position: absolute;
         bottom: 15px;
         left: 15px;
-        background: rgba(0, 0, 0, 0.7);
-        color: #fff;
         padding: 5px 10px;
         border-radius: 20px;
         font-size: 0.8rem;
-        border: 1px solid rgba(255, 255, 255, 0.2);
         transition: all 0.3s ease;
       }
+      
       .card .copy-text {
         position: absolute;
         bottom: 0;
         left: 0;
         width: 100%;
         padding: 15px;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
-        color: #fff;
         font-size: 0.9rem;
         text-align: center;
         opacity: 0;
         transform: translateY(20px);
         transition: all 0.3s ease;
       }
+      
       .card:hover .date-label {
         opacity: 0;
         transform: translateY(10px);
       }
+      
       .card:hover .copy-text {
         opacity: 1;
         transform: translateY(0);
@@ -310,23 +506,21 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(30, 30, 30, 0);
-        backdrop-filter: blur(0);
+        backdrop-filter: blur(10px);
         z-index: 1000;
-        display: none; /* 初始隐藏 */
+        display: none;
         align-items: center;
         justify-content: center;
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease,
-          background 0.3s ease, backdrop-filter 0.3s ease;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+        background: rgba(255, 255, 255, 0);
       }
 
       .modal.active {
         opacity: 1;
         visibility: visible;
-        background: rgba(30, 30, 30, 0.9);
-        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.95);
       }
 
       .modal-content {
@@ -348,7 +542,7 @@
         max-height: 80vh;
         border-radius: 8px;
         overflow: hidden;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
       }
 
       .modal-img {
@@ -364,12 +558,12 @@
         left: 0;
         width: 100%;
         padding: 30px 20px 20px;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
-        color: #fff;
         text-align: center;
         transform: translateY(100%);
         opacity: 0;
         transition: all 0.3s ease;
+        background: linear-gradient(to top, rgba(255, 255, 255, 0.95), transparent);
+        color: #333;
       }
 
       .modal-img-container:hover .modal-caption {
@@ -381,13 +575,13 @@
         position: absolute;
         top: 30px;
         right: 30px;
-        color: #fff;
         font-size: 2rem;
         cursor: pointer;
         background: none;
         border: none;
         transition: transform 0.3s ease;
         opacity: 0.7;
+        color: #333;
       }
 
       .modal-close:hover {
@@ -397,66 +591,82 @@
 
       /* 页脚样式 */
       footer {
-        background: #1a1a1a;
-        color: #aaa;
-        padding: 30px 15px;
+        padding: 20px 15px;
         text-align: center;
         font-size: 0.9rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
       }
+      
       footer a {
-        color: #e0e0e0;
         text-decoration: none;
         transition: color 0.2s ease;
+        position: relative;
       }
+      
       footer a:hover {
-        color: #fff;
-        text-decoration: underline;
+        color: #000;
       }
-      footer div {
+      
+      footer a::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 1px;
+        bottom: -2px;
+        left: 0;
+        transition: width 0.3s ease;
+        background-color: #000;
+      }
+      
+      footer a:hover::after {
+        width: 100%;
+      }
+      
+      .footer-info {
         margin-bottom: 10px;
       }
-      #vercount_value_site_pv,
-      #vercount_value_site_uv {
-        font-weight: bold;
-        color: #e0e0e0;
+      
+      .footer-copyright {
+        font-size: 0.8rem;
       }
     </style>
   </head>
   <body>
-    <!-- 悬浮菜单 -->
-    <nav class="floating-menu">
-      <a href="/" style="display: flex; align-items: center; margin: 0 5px 0 5px">
-        <img src="favicon.ico" alt="Icon" class="menu-icon" />
-      </a>
-      <a href="https://blog.liushen.fun/" class="menu-item" target="_blank"
-        >博客</a
-      >
-      <a href="https://www.liushen.fun/" class="menu-item" target="_blank"
-        >主页</a
-      >
-      <a href="https://github.com/willow-god" class="menu-item" target="_blank"
-        >GitHub</a
-      >
-      <a
-        href="https://github.com/willow-god/daily-image"
-        class="menu-item"
-        target="_blank"
-        >项目</a
-      >
+    <!-- 全宽导航栏 -->
+    <nav class="navbar">
+      <div class="navbar-content">
+        <div class="navbar-logo">
+          <img src="bing.ico" alt="Icon" loading="lazy" />
+          <span>Bing每日一图</span>
+        </div>
+        <div class="navbar-menu" id="navbarMenu">
+          <a href="https://www.xrbk.cn" class="navbar-item" target="_blank">博客</a>
+          <a href="https://cdn.xrbk.cn" class="navbar-item" target="_blank">公共CDN</a>
+          <a href="https://www.xrbk.cn/dsjz" class="navbar-item" target="_blank">打赏捐赠</a>
+        </div>
+        <div class="menu-toggle" id="menuToggle">
+          <i>&equiv;</i>
+        </div>
+      </div>
     </nav>
 
     <div class="hero">
-      <img
-        id="hero-img" 
-        class="img-loading" 
-        src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMmQyZDJkIi8+PC9zdmc+"
-        alt="Today's Bing Wallpaper"
-      />
+      <div class="hero-img-container">
+        <div class="hero-img-loading">
+          <div class="hero-img-loading-spinner"></div>
+        </div>
+        <img
+          id="hero-img" 
+          class="hero-img" 
+          alt="Today's Bing Wallpaper"
+          loading="eager"  <!-- 优先加载首屏图片 -->
+        />
+      </div>
       <div class="overlay">
         <div class="center-text">
           <h1>Bing每日一图</h1>
-          <p>腾讯EO强力支持，实现每日一图接口，保存最近30天内的bing壁纸</p>
-          <p>由清羽飞扬进行维护，每日更新，每日精彩</p>
+          <p>实现每日一图接口，保存最近30天内的bing壁纸</p>
+          <p>由新锐博客进行维护，每日更新，每日精彩</p>
         </div>
         <div class="date" id="hero-date"></div>
         <div class="copy" id="hero-copy"></div>
@@ -476,91 +686,14 @@
 
     <!-- 页脚 -->
     <footer>
-      <script defer src="https://cn.vercount.one/js"></script>
-
-      <div style="margin-bottom: 0.5em">
-        网站总请求量：<span id="vercount_value_site_pv">🤕</span> |
-        独立访客数：<span id="vercount_value_site_uv">🤕</span>
+      <div class="footer-info">
+      <script async src="https://cdn.jsdmirror.com/npm/penndu@16.0.0/bsz.js"></script>
+总访问量 <span id="busuanzi_site_pv">加载中...</span> 次
+总访客数 <span id="busuanzi_site_uv">加载中...</span> 人
       </div>
-
-      <div style="margin-bottom: 0.5em">
-        本站已运行：<span id="running-days">计算中...</span> |
-        距离下次更新：<span id="next-update">计算中...</span>
+      <div class="footer-copyright">
+ <span>本站已运行：<span id="running-days">计算中...</span> | © <span id="year"></span> 新锐博客 | <a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">苏ICP备2024091362号</a> | 本项目基于<a rel="nofollow" target="_blank" href="https://github.com/willow-god/daily-image" >Daily Bing Image</a>二次开发</span>
       </div>
-
-      <div style="margin-bottom: 0.5em">
-        Powered by
-        <a
-          href="https://github.com/features/actions"
-          target="_blank"
-          rel="nofollow noopener noreferrer"
-          >GitHub Actions</a>
-        |
-        <a href="https://cn.bing.com"
-           target="_blank" 
-           rel="nofollow noopener noreferrer"
-          >Bing_CN</a> 
-        |
-        <a
-          href="https://cloud.tencent.com/product/teo"
-          target="_blank"
-          rel="nofollow noopener noreferrer"
-          >EdgeOne</a>
-      </div>
-
-      <div>
-        项目地址:
-        <a
-          href="https://github.com/willow-god/daily-image"
-          target="_blank"
-          rel="nofollow noopener noreferrer"
-          >daily-image</a>
-        | MIT License © <span id="year"></span> |
-        <a
-          href="https://www.liushen.fun/"
-          target="_blank"
-          rel="nofollow noopener noreferrer"
-          >LiuShen</a>
-      </div>
-
-      <script>
-        // 动态年份显示
-        document.getElementById("year").textContent = new Date().getFullYear();
-        
-        // 计算网站运行时间和下次更新时间
-        function updateTimes() {
-          // 网站开始运行的日期（请修改为您的网站上线日期）
-          const startDate = new Date('2025-4-20'); // 示例日期，请替换为实际上线日期
-          const now = new Date();
-          
-          // 计算已运行天数
-          const runningDays = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
-          document.getElementById("running-days").textContent = runningDays + " 天";
-          
-          // 计算距离下次更新的时间
-          const tomorrow = new Date(now);
-          tomorrow.setDate(tomorrow.getDate() + (now.getHours() >= 12 ? 1 : 0));
-          tomorrow.setHours(12, 0, 0, 0);
-          
-          // 计算剩余时间
-          let diff = tomorrow - now;
-          const hours = Math.floor(diff / (1000 * 60 * 60));
-          diff -= hours * 1000 * 60 * 60;
-          const minutes = Math.floor(diff / (1000 * 60));
-          diff -= minutes * 1000 * 60;
-          const seconds = Math.floor(diff / 1000);
-          
-          // 格式化显示
-          document.getElementById("next-update").textContent = 
-            `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-        
-        // 初始更新
-        updateTimes();
-        
-        // 每秒更新一次倒计时
-        setInterval(updateTimes, 1000);
-      </script>
     </footer>
 
     <!-- Modal -->
@@ -568,7 +701,7 @@
       <button class="modal-close" id="modalClose">&times;</button>
       <div class="modal-content">
         <div class="modal-img-container">
-          <img class="modal-img" id="modalImage" src="" alt="" />
+          <img class="modal-img" id="modalImage" src="" alt="" loading="lazy" />
           <div class="modal-caption" id="modalCaption"></div>
         </div>
       </div>
@@ -576,6 +709,54 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+        // 导航栏菜单切换
+        const menuToggle = document.getElementById('menuToggle');
+        const navbarMenu = document.getElementById('navbarMenu');
+        
+        menuToggle.addEventListener('click', () => {
+          navbarMenu.classList.toggle('active');
+        });
+        
+        // 点击菜单项后关闭菜单（移动端）
+        const menuItems = navbarMenu.querySelectorAll('.navbar-item');
+        menuItems.forEach(item => {
+          item.addEventListener('click', () => {
+            if (window.innerWidth < 768) {
+              navbarMenu.classList.remove('active');
+            }
+          });
+        });
+        
+        // 滚动时导航栏背景变化
+        window.addEventListener('scroll', () => {
+          const navbar = document.querySelector('.navbar');
+          if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+          } else {
+            navbar.classList.remove('scrolled');
+          }
+        });
+
+        // 动态年份显示
+        document.getElementById("year").textContent = new Date().getFullYear();
+        
+        // 计算网站运行时间
+        function updateTimes() {
+          // 网站开始运行的日期（请修改为您的网站上线日期）
+          const startDate = new Date('2025-6-29'); // 示例日期，请替换为实际上线日期
+          const now = new Date();
+          
+          // 计算已运行天数
+          const runningDays = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
+          document.getElementById("running-days").textContent = runningDays + " 天";
+        }
+        
+        // 初始更新
+        updateTimes();
+        
+        // 每秒更新一次倒计时
+        setInterval(updateTimes, 1000);
+
         // Modal elements
         const modal = document.getElementById("imageModal");
         const modalImage = document.getElementById("modalImage");
@@ -613,18 +794,32 @@
           }
         });
 
-        // 图片加载函数
+        // 图片加载函数 - 直接加载所有图片
         function loadImage(imgElement, src) {
-          // imgElement.classList.add("img-loading");
+          // 确保加载动画元素存在
+          const loadingElement = imgElement.previousElementSibling;
+          
+          // 创建Image对象预加载
           const loader = new Image();
           loader.src = src;
           loader.onload = () => {
             imgElement.src = src;
-            imgElement.classList.add("img-loaded");
+            imgElement.classList.add("loaded");
+            
+            // 隐藏加载动画
+            if (loadingElement) {
+              loadingElement.style.opacity = '0';
+              setTimeout(() => {
+                loadingElement.style.display = 'none';
+              }, 300); // 等待淡出动画完成
+            }
           };
           loader.onerror = () => {
-            imgElement.classList.remove("img-loading");
             console.error("图片加载失败:", src);
+            // 加载失败时也隐藏加载动画
+            if (loadingElement) {
+              loadingElement.style.display = 'none';
+            }
           };
         }
 
@@ -675,46 +870,54 @@
             // 逐个添加卡片，带动画
             data.forEach((item, index) => {
               setTimeout(() => {
-              const card = document.createElement("div");
-              card.className = "card";
-              card.style.opacity = "0";
-              card.style.transform = "translateY(50px)";
-              card.style.transition = "opacity 1.0s cubic-bezier(.4,2,.6,1), transform 1.0s cubic-bezier(.4,2,.6,1)";
+                const card = document.createElement("div");
+                card.className = "card";
+                card.style.opacity = "0";
+                card.style.transform = "translateY(50px)";
+                card.style.transition = "opacity 1.0s cubic-bezier(.4,2,.6,1), transform 1.0s cubic-bezier(.4,2,.6,1)";
 
-              const img = document.createElement("img");
-              img.alt = item.date;
-              img.className = "img-loading";
-              img.src =
-                "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMmQyZDJkIi8+PC9zdmc+";
+                const imgContainer = document.createElement("div");
+                imgContainer.className = "card-img-container";
+                
+                const loadingDiv = document.createElement("div");
+                loadingDiv.className = "card-img-loading";
+                loadingDiv.innerHTML = '<div class="card-img-spinner"></div>';
+                
+                const img = document.createElement("img");
+                img.alt = item.date;
+                img.className = "card-img";
+                img.src = item.path; // 直接使用src而不是data-src
+                
+                const dateLabel = document.createElement("div");
+                dateLabel.className = "date-label";
+                dateLabel.textContent = item.date;
 
-              const dateLabel = document.createElement("div");
-              dateLabel.className = "date-label";
-              dateLabel.textContent = item.date;
+                const copyText = document.createElement("div");
+                copyText.className = "copy-text";
+                copyText.textContent = item.copyright;
 
-              const copyText = document.createElement("div");
-              copyText.className = "copy-text";
-              copyText.textContent = item.copyright;
+                imgContainer.appendChild(loadingDiv);
+                imgContainer.appendChild(img);
+                card.appendChild(imgContainer);
+                card.appendChild(dateLabel);
+                card.appendChild(copyText);
+                historyEl.appendChild(card);
 
-              card.appendChild(img);
-              card.appendChild(dateLabel);
-              card.appendChild(copyText);
-              historyEl.appendChild(card);
+                // 立即加载图片
+                loadImage(img, item.path);
 
-              // 加载实际图片
-              loadImage(img, item.path);
+                // 添加点击事件显示modal
+                card.addEventListener("click", () => {
+                  modalImage.src = item.path;
+                  modalCaption.textContent = `${item.date} - ${item.copyright}`;
+                  showModal();
+                });
 
-              // Add click event to show modal
-              card.addEventListener("click", () => {
-                modalImage.src = item.path;
-                modalCaption.textContent = `${item.date} - ${item.copyright}`;
-                showModal();
-              });
-
-              // 触发动画
-              setTimeout(() => {
-                card.style.opacity = "1";
-                card.style.transform = "translateY(0)";
-              }, 50);
+                // 触发动画
+                setTimeout(() => {
+                  card.style.opacity = "1";
+                  card.style.transform = "translateY(0)";
+                }, 50);
               }, index * 80); // 每个卡片延迟80ms
             });
           })
