@@ -13,8 +13,8 @@ jobs:
     - name: Pull latest repository
       uses: actions/checkout@v4
       with:
-        ref: main  # 明确检出main分支
-        fetch-depth: 0  # 获取完整的提交历史
+        ref: main
+        fetch-depth: 0
 
     - name: Cache pip packages
       uses: actions/cache@v4
@@ -50,10 +50,9 @@ jobs:
         cp ./page/edgeone.json static/
         
         git checkout main
-        git add static/
+        git add -f static/  # 强制添加被忽略的 static 目录
         git status
         
-        # 只有文件有变化时才提交
         if [[ -n $(git status --porcelain) ]]; then
           git commit -m "⏱️GitHub Action每日定时更新Bing壁纸"
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git main
