@@ -12,6 +12,9 @@ jobs:
     steps:
     - name: Pull latest repository
       uses: actions/checkout@v4
+      with:
+        ref: main  # 明确检出main分支
+        fetch-depth: 0  # 获取完整的提交历史
 
     - name: Cache pip packages
       uses: actions/cache@v4
@@ -31,19 +34,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install Pillow requests
 
-    - name: Fetch page branch content into static/
-      run: |
-        if git ls-remote --exit-code --heads origin page; then
-          git fetch origin page
-          rm -rf static
-          mkdir static
-          git --work-tree=static checkout origin/page -- .
-        else
-          echo "No 'page' branch exists, skipping fetch."
-          mkdir -p static
-        fi
-        ls
-
     - name: Run Python script to get Bing image
       run: python main.py
 
@@ -52,18 +42,24 @@ jobs:
         git config --global user.email "actions@github.com"
         git config --global user.name "GitHub Actions"
 
-    - name: Commit and push to page branch
+    - name: Commit and push changes to main branch
       run: |
         cp ./page/index.html static/
         cp ./page/favicon.ico static/
         cp ./page/readme.md static/
         cp ./page/edgeone.json static/
-        cd static
-        git init
-        git checkout -b page
-        git add .
-        git commit -m "⏱️GitHub Action每日定时更新"
-        git push --force https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git page
+        
+        git checkout main
+        git add static/
+        git status
+        
+        # 只有文件有变化时才提交
+        if [[ -n $(git status --porcelain) ]]; then
+          git commit -m "⏱️GitHub Action每日定时更新Bing壁纸"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git main
+        else
+          echo "No changes to commit"
+        fi
 
     - name: Delete Workflow Runs
       uses: Mattraks/delete-workflow-runs@v2
