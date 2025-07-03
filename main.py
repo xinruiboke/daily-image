@@ -19,31 +19,42 @@ INDEX_PATH = os.path.join(PICTURE_FOLDER, "index.json")
 os.makedirs(PICTURE_FOLDER, exist_ok=True)
 
 def fetch_bing_images(n=8):
-    """获取最新的Bing壁纸信息"""
+    """获取最新的Bing壁纸信息，只包含今天及以前的图片"""
     try:
-        url = f"https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n={n}&uhd=1"
+        # 使用 idx=-1 从昨天开始获取，避免默认包含未来日期
+        url = f"https://www.bing.com/HPImageArchive.aspx?format=js&idx=-1&n={n}&uhd=1"
         resp = requests.get(url)
         resp.raise_for_status()
         data = resp.json()
 
         images = []
+        today = datetime.now().date()  # 获取当前日期（不含时间）
+        
         for image in data["images"]:
-            date = datetime.strptime(image["enddate"], "%Y%m%d").strftime("%Y-%m-%d")
-            logging.info(f"获取到图片: {date}")
-            # 生成高分辨率和备用URL
-            urlbase = image["urlbase"]
-            high_res_url = f"https://www.bing.com{urlbase}_UHD.jpg"
-            fallback_url = f"https://www.bing.com{urlbase}_1920x1080.jpg"
+            date_str = image["enddate"]
+            # 将API返回的日期字符串转换为datetime对象
+            date_obj = datetime.strptime(date_str, "%Y%m%d").date()
+            date = date_obj.strftime("%Y-%m-%d")
+            
+            # 只保留今天及以前的图片
+            if date_obj <= today:
+                logging.info(f"获取到图片: {date} (API日期: {date_str})")
+                # 生成高分辨率和备用URL
+                urlbase = image["urlbase"]
+                high_res_url = f"https://www.bing.com{urlbase}_UHD.jpg"
+                fallback_url = f"https://www.bing.com{urlbase}_1920x1080.jpg"
 
-            test_resp = requests.head(high_res_url)
-            image_url = high_res_url if test_resp.status_code == 200 else fallback_url
+                test_resp = requests.head(high_res_url)
+                image_url = high_res_url if test_resp.status_code == 200 else fallback_url
 
-            images.append({
-                "date": date,
-                "url": image_url,
-                "copyright": image.get("copyright", ""),
-                "urlbase": urlbase
-            })
+                images.append({
+                    "date": date,
+                    "url": image_url,
+                    "copyright": image.get("copyright", ""),
+                    "urlbase": urlbase
+                })
+            else:
+                logging.info(f"跳过未来图片: {date} (API日期: {date_str}, 今天: {today})")
 
         return images
     except Exception as e:
@@ -88,7 +99,8 @@ def save_image(img, filepath):
 
 def merge_and_update_images(new_images, existing_index):
     """合并新图片和现有索引，并更新文件"""
-    today_str = datetime.now().strftime("%Y-%m-%d")
+    today = datetime.now().date()
+    today_str = today.strftime("%Y-%m-%d")
     logging.info(f"今天的日期: {today_str}")
     updated_index = []
     existing_dates = {item["date"] for item in existing_index}
@@ -113,7 +125,7 @@ def merge_and_update_images(new_images, existing_index):
             
         # 如果是今天的图，保存额外几份
         if date == today_str:
-            logging.info("保存今天的图片为 daily.webp / daily.jpeg / original.jpeg , 今日时间: " + date)
+            logging.info("保存今天的图片为 daily.webp / daily.jpeg / original.jpeg")
             save_image(img, os.path.join(STATIC_FOLDER, "daily.webp"))
             img.save(os.path.join(STATIC_FOLDER, "daily.jpeg"), "JPEG", quality=95, optimize=True)
             img.save(os.path.join(STATIC_FOLDER, "original.jpeg"), "JPEG", quality=100)
@@ -134,12 +146,12 @@ def merge_and_update_images(new_images, existing_index):
     combined_index.sort(key=lambda x: x["date"], reverse=True)
     
     # 保留最近30天的数据
-    thirty_days_ago = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
+    thirty_days_ago = (today - timedelta(days=30)).strftime("%Y-%m-%d")
     filtered_index = []
     removed_files = set()
     
     for item in combined_index:
-        if item["date"] > thirty_days_ago:
+        if item["date"] >= thirty_days_ago:
             filtered_index.append(item)
         else:
             # 记录要删除的文件
